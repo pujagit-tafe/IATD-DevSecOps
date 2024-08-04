@@ -9,6 +9,7 @@ import os
 vuln = int(os.getenv('vulnerable', 1))
 # vuln=1
 # token alive for how many seconds?
+print(vuln)
 alive = int(os.getenv('tokentimetolive', 60))
 
 
