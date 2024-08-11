@@ -58,7 +58,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops-labs:latest
   dast:
-    needs: [test, sonarqube]
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -81,7 +81,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/devops-labs:dast-test
   deploy:
-    needs: build
+    needs: [build, dast]
     runs-on: ubuntu-latest
     steps:
       - uses: azure/login@v1
