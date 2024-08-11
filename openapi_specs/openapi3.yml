@@ -4,7 +4,7 @@ info:
   description: OpenAPI v3 specs for VAmPI
   version: '0.1'
 servers:
-  - url: http://localhost:5000
+  - url: https://devops-test-app.icypebble-aebd4345.australiaeast.azurecontainerapps.io
 components: {}
 #  securitySchemes:
 #    bearerAuth:            # arbitrary name for the security scheme
