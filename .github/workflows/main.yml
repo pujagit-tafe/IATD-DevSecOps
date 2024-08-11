@@ -200,7 +200,7 @@ jobs:
          name: sonarqube-report
          path: sonarqube-report.json
   submit_results_3:
-   needs: [build]
+   needs: [deploy]
    if: true
    runs-on: ubuntu-latest
    steps:
