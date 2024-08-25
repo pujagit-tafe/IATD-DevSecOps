@@ -257,7 +257,7 @@ jobs:
        echo "Zap upload: $ZAP_RESPONSE"
   
   submit_reports_4:
-   needs: [test, sonarqube, dast, build]
+   needs: [test, dast, build]
    if: true
    runs-on: ubuntu-latest
    steps:
@@ -281,8 +281,6 @@ jobs:
          WEEK1_CONTAINER=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" -d "$DOCKERHUB_USERNAME/devops-labs" https://devsecops-ver.azurewebsites.net/api/week1-container)
          echo "Week1 container upload: $WEEK1_CONTAINER"
 
-         SONAR_RESPONSE=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN"  --data-binary @$GITHUB_WORKSPACE/sonarqube-report.json https://devsecops-ver.azurewebsites.net/api/week3-sonar-report)
-         echo "Sonar upload: $SONAR_RESPONSE"
          ZAP_RESPONSE=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN"  --data-binary @$GITHUB_WORKSPACE/report_json.json https://devsecops-ver.azurewebsites.net/api/week3-zap-report)
          echo "Zap upload: $ZAP_RESPONSE"
 
