@@ -251,10 +251,6 @@ jobs:
       env:
        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
        AZURE_ACCESS_TOKEN: ${{ steps.token-gen.outputs.azureAccessToken }}
-    - name: Upload reports
-      env:
-       SUBMIT_USER: ${{ secrets.SUBMIT_USER }}
-       SUBMIT_PASS: ${{ secrets.SUBMIT_PASS }}
       run: |
        WEEK1_CONTAINER=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" -d "$DOCKERHUB_USERNAME/devops-labs" https://devsecops-ver.azurewebsites.net/api/week1-container)
        echo "Week1s container upload: $WEEK1_CONTAINER"
@@ -265,4 +261,4 @@ jobs:
        echo "Zap upload: $ZAP_RESPONSE"
 
        IMAGE_RESPONSE=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" --data-binary @$GITHUB_WORKSPACE/results.json https://devsecops-ver.azurewebsites.net/api/week4-image-report)
-       echo "Image report upload: $IMAGE_RESPONSE"
+       echo "Image report upload: $IMAGE_RESPONSE"  
