@@ -209,7 +209,7 @@ jobs:
          echo $GITHUB_WORKSPACE
          pwd
       - name: Install Cosign
-      uses: sigstore/cosign-installer@v3.4.0
+        uses: sigstore/cosign-installer@v3.4.0
 
       - name: Verify image signature
         env:
@@ -222,7 +222,7 @@ jobs:
   submit_results:
     needs: [deploy]
     if: true
-    runs-on: ubuntu-latest
+    runss-on: ubuntu-latest
     steps:
       - uses: azure/login@v1
         with:
