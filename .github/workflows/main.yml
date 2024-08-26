@@ -207,6 +207,8 @@ jobs:
          find $GITHUB_WORKSPACE/ -name "openapi3.yml"
          echo $GITHUB_WORKSPACE
          pwd
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3.4.0
       - name: Verify image signature
         env:
           IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/devops-labs:latest
