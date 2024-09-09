@@ -226,7 +226,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Install jq
-          run: |
+        run: |
           sudo apt-get update -y
           sudo apt-get install jq -y
       - name: Azure CLI script
@@ -258,7 +258,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Install jq
-          run: |
+        run: |
           sudo apt-get update -y
           sudo apt-get install jq -y
       - name: Azure CLI script
@@ -286,7 +286,7 @@ jobs:
       with:
        creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Install jq
-          run: |
+      run: |
           sudo apt-get update -y
           sudo apt-get install jq -y
     - name: Azure CLI script
