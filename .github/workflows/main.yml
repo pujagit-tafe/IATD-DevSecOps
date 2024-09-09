@@ -225,15 +225,16 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
+      - name: Install jq
+          run: |
+          sudo apt-get update -y
+          sudo apt-get install jq -y
       - name: Azure CLI script
         id: token-gen
         uses: azure/CLI@v1
         with:
           azcliversion: latest
           inlineScript: |
-            apt update -y
-            apt install jq -y
             ACCESS_TOKEN=$(az account get-access-token | jq -r .accessToken)
             echo "azureAccessToken=$ACCESS_TOKEN" >> "$GITHUB_OUTPUT"
       - name: Upload reports
@@ -256,15 +257,16 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
+      - name: Install jq
+          run: |
+          sudo apt-get update -y
+          sudo apt-get install jq -y
       - name: Azure CLI script
         id: token-gen
         uses: azure/CLI@v1
         with:
           azcliversion: latest
           inlineScript: |
-            apt update -y 
-            apt install jq -y 
             ACCESS_TOKEN=$(az account get-access-token | jq -r .accessToken)
             echo "azureAccessToken=$ACCESS_TOKEN" >> "$GITHUB_OUTPUT"
       - name: Upload reports
@@ -283,15 +285,16 @@ jobs:
     - uses: azure/login@v1
       with:
        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
+    - name: Install jq
+          run: |
+          sudo apt-get update -y
+          sudo apt-get install jq -y
     - name: Azure CLI script
       id: token-gen
       uses: azure/CLI@v1
       with:
        azcliversion: latest
        inlineScript: |
-        apt update -y 
-        apt install jq -y 
         ACCESS_TOKEN=$(az account get-access-token | jq -r .accessToken)
         echo "azureAccessToken=$ACCESS_TOKEN" >> "$GITHUB_OUTPUT"
     - name: Download SonarQube report
