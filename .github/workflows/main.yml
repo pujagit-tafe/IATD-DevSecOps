@@ -329,7 +329,7 @@ jobs:
          curl "$URL1" -o ci-pipeline.json
          URL2="https://raw.githubusercontent.com/pujagit-tafe/IATD-DevSecOps/main/threat-model/ci-pipeline.pdf"
          echo "Report URL $URL"
-         curl "$URL1" -o ci-pipeline.pdf
+         curl "$URL2" -o ci-pipeline.pdf
     - name: Upload reports
       env:
        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
