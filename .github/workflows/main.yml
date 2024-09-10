@@ -321,6 +321,15 @@ jobs:
       with:
        name: zap-report
        path: ${{github.workspace}}
+    - name: Download Thread-Model Reports
+      run: |
+         sleep 30
+         URL1="https://github.com/pujagit-tafe/IATD-DevSecOps/blame/main/threat-model/ci-pipeline.json"
+         echo "Report URL $URL"
+         curl "$URL1" -o ci-pipeline.json
+         URL2="https://github.com/pujagit-tafe/IATD-DevSecOps/blame/main/threat-model/ci-pipeline.pdf"
+         echo "Report URL $URL"
+         curl "$URL1" -o ci-pipeline.pdf
     - name: Upload reports
       env:
        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -340,8 +349,8 @@ jobs:
        WEEK5_RESPONSE=$(curl -X POST  -H "Authorization: Bearer $AZURE_ACCESS_TOKEN"  -d "$IMAGE" https://devsecops-ver.azurewebsites.net/api/week5-report)
        echo "Week5 report upload: $WEEK5_RESPONSE" 
 
-       MODEL_RESPONSE=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" --data-binary @$GITHUB_WORKSPACE/threat-model/ci-pipeline.json https://devsecops-ver.azurewebsites.net/api/week6-report)
+       MODEL_RESPONSE=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" --data-binary @$GITHUB_WORKSPACE/ci-pipeline.json https://devsecops-ver.azurewebsites.net/api/week6-report)
        echo "Model report upload: $MODEL_RESPONSE"
 
-       MODEL_RESPONSE2=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" --data-binary @$GITHUB_WORKSPACE/threat-model/ci-pipeline.pdf https://devsecops-ver.azurewebsites.net/api/week6-report)
+       MODEL_RESPONSE2=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" --data-binary @$GITHUB_WORKSPACE/ci-pipeline.pdf https://devsecops-ver.azurewebsites.net/api/week6-report)
        echo "Model report PDF upload: $MODEL_RESPONSE2"
