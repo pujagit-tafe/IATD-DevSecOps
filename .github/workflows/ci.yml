@@ -126,7 +126,7 @@ jobs:
             name: image-report
             path: ${{ steps.image-scan.outputs.json }}
   security_gate:
-        needs: [sonarqube, dast, image-scan, submit_results_3]
+        needs: [sonarqube, dast, image-scan]
         if: false
         runs-on: ubuntu-latest
         steps:
@@ -218,66 +218,6 @@ jobs:
           cosign verify $IMAGE  --certificate-identity puja310785@gmail.com --certificate-oidc-issuer https://github.com/login/oauth
         #  sed -i "s,http://localhost:5000,https://$FQDN,g" $GITHUB_WORKSPACE/openapi_specs/openapi3.yml
   submit_results:
-    needs: [deploy]
-    if: true
-    runs-on: ubuntu-latest
-    steps:
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Install jq
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install jq -y
-      - name: Azure CLI script
-        id: token-gen
-        uses: azure/CLI@v1
-        with:
-          azcliversion: 2.63.0
-          inlineScript: |
-            ACCESS_TOKEN=$(az account get-access-token | jq -r .accessToken)
-            echo "azureAccessToken=$ACCESS_TOKEN" >> "$GITHUB_OUTPUT"
-      - name: Upload reports
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          AZURE_ACCESS_TOKEN: ${{ steps.token-gen.outputs.azureAccessToken }}
-        run: |
-          export FQDN=$(az containerapp show -n devops-app -g devsecops-lab --query properties.configuration.ingress.fqdn -o tsv)
-          echo "FQDN: $FQDN"
-          WEEK1_APP=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" -d "https://$FQDN" https://devsecops-ver.azurewebsites.net/api/week1-app)
-          echo "Week1 app upload: $WEEK1_APP"
-          WEEK2_SUBMIT=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" -d "https://$FQDN" https://devsecops-ver.azurewebsites.net/api/week2-submit)
-          echo "Week2 submit: $WEEK2_SUBMIT"
-  submit_results_2:
-    needs: [deploy]
-    if: true
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Install jq
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install jq -y
-      - name: Azure CLI script
-        id: token-gen
-        uses: azure/CLI@v1
-        with:
-          azcliversion: 2.63.0
-          inlineScript: |
-            ACCESS_TOKEN=$(az account get-access-token | jq -r .accessToken)
-            echo "azureAccessToken=$ACCESS_TOKEN" >> "$GITHUB_OUTPUT"
-      - name: Upload reports
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          AZURE_ACCESS_TOKEN: ${{ steps.token-gen.outputs.azureAccessToken }}
-        run: |
-          WEEK1_CONTAINER=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" -d "$DOCKERHUB_USERNAME/devops-labs" https://devsecops-ver.azurewebsites.net/api/week1-container)
-          echo "Week1 container upload: $WEEK1_CONTAINER"
-      
-  submit_results_3:
    needs: [test, sonarqube, dast, build]
    if: true
    runs-on: ubuntu-latest
@@ -336,6 +276,12 @@ jobs:
        AZURE_ACCESS_TOKEN: ${{ steps.token-gen.outputs.azureAccessToken }}
        IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/devops-labs
       run: |
+       export FQDN=$(az containerapp show -n devops-app -g devsecops-lab --query properties.configuration.ingress.fqdn -o tsv)
+       echo "FQDN: $FQDN"
+       WEEK1_APP=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" -d "https://$FQDN" https://devsecops-ver.azurewebsites.net/api/week1-app)
+       echo "Week1 app upload: $WEEK1_APP"
+       WEEK2_SUBMIT=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" -d "https://$FQDN" https://devsecops-ver.azurewebsites.net/api/week2-submit)
+       echo "Week2 submit: $WEEK2_SUBMIT"
        WEEK1_CONTAINER=$(curl -X POST -H "Authorization: Bearer $AZURE_ACCESS_TOKEN" -d "$DOCKERHUB_USERNAME/devops-labs" https://devsecops-ver.azurewebsites.net/api/week1-container)
        echo "Week1s container upload: $WEEK1_CONTAINER"
 
